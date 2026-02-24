@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nikhil Muneshwar — Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,400;1,9..144,200&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a08;
+    --surface: #111110;
+    --border: #222220;
+    --accent: #e8ff47;
+    --accent2: #47ffe8;
+    --text: #e8e4dc;
+    --muted: #888880;
+    --card: #141412;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,8,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232,255,71,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,255,71,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 48px 80px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 8vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-name span { color: var(--accent); }
+
+  .hero-subtitle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--muted);
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-summary {
+    margin-top: 32px;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--muted);
+    max-width: 520px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+  }
+
+  .hero-cta {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+
+  .btn {
+    padding: 12px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--accent);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    padding: 80px 80px 80px 48px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    width: 100%;
+    max-width: 420px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .stat-card:hover { border-color: var(--accent); }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: top;
+  }
+
+  .stat-card:hover::before { transform: scaleY(1); }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 80px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 64px;
+  }
+
+  .section-num {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  /* EXPERIENCE */
+  .exp-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .exp-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    transition: border-color 0.3s;
+    cursor: default;
+  }
+
+  .exp-item:hover { border-color: var(--accent); }
+
+  .exp-company {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .exp-role {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  .exp-period {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  .exp-location {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exp-bullets li {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .exp-bullets li strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+    cursor: default;
+  }
+
+  .project-card:hover { border-color: var(--accent2); }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent2);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: top;
+  }
+
+  .project-card:hover::before { transform: scaleY(1); }
+
+  .project-meta {}
+
+  .project-num {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .project-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .project-context {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .project-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .project-bullets li {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .project-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+  }
+
+  .project-bullets li strong { color: var(--text); font-weight: 500; }
+
+  .project-links {
+    margin-top: 28px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .project-link {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 7px 14px;
+    transition: all 0.2s;
+  }
+
+  .project-link:hover {
+    background: var(--accent2);
+    color: var(--bg);
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+  }
+
+  .project-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border: 1px solid rgba(71,255,232,0.2);
+    color: rgba(71,255,232,0.6);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .skill-group {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px;
+    transition: border-color 0.3s;
+  }
+
+  .skill-group:hover { border-color: var(--accent2); }
+
+  .skill-group-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 20px;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-tag {
+    font-size: 11px;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+
+  .skill-tag:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* EDUCATION & CERTS */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .edu-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .edu-card:hover { border-color: var(--accent); }
+
+  .edu-degree {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .edu-school {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--text);
+    margin-top: 8px;
+  }
+
+  .edu-period {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  .cert-list {
+    margin-top: 48px;
+    display: flex;
+    gap: 2px;
+  }
+
+  .cert-card {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: border-color 0.3s;
+  }
+
+  .cert-card:hover { border-color: var(--accent); }
+
+  .cert-icon {
+    font-size: 20px;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .cert-name {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+
+  .cert-org {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    letter-spacing: 1px;
+  }
+
+  /* CONTACT */
+  #contact {
+    text-align: center;
+    padding: 100px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #contact::before {
+    content: 'CONTACT';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 300px;
+    color: rgba(232,255,71,0.03);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    letter-spacing: 20px;
+    white-space: nowrap;
+  }
+
+  .contact-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    letter-spacing: 4px;
+    line-height: 1;
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-title span { color: var(--accent); }
+
+  .contact-links {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .footer-tag {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1024px) {
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .exp-item { grid-template-columns: 1fr; gap: 24px; }
+    .project-card { grid-template-columns: 1fr; gap: 24px; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .edu-grid { grid-template-columns: 1fr; }
+    section, footer { padding: 60px 32px; }
+    nav { padding: 20px 32px; }
+    .hero-left { padding: 80px 32px; }
+  }
+
+  @media (max-width: 640px) {
+    .skills-grid { grid-template-columns: 1fr; }
+    .cert-list { flex-direction: column; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">NM</div>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="border-top: none; padding: 0;">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-left">
+    <div class="hero-tag">// Data Engineer · Kingston Upon Thames, UK</div>
+    <h1 class="hero-name">NIKHIL <span>MUNESHWAR</span></h1>
+    <p class="hero-subtitle">Building the pipes that power decisions.</p>
+    <p class="hero-summary">
+      Data professional with 2+ years designing and maintaining scalable pipelines processing 5+ TB per week across enterprise environments. From geospatial ETL to ML-powered document processing — I build things that don't break.
+    </p>
+    <div class="hero-cta">
+      <a href="mailto:nikhilmuneshwar05@gmail.com" class="btn btn-primary">Get in touch</a>
+      <a href="https://www.linkedin.com/in/nikhilmuneshwar/" target="_blank" class="btn btn-outline">LinkedIn ↗</a>
+      <a href="https://github.com/nikhilmuneshwar0" target="_blank" class="btn btn-outline">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">TB / week processed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Years experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">5M+</div>
+        <div class="stat-label">Spatial records</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Data sources integrated</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">EXPERIENCE</h2>
+  </div>
+
+  <div class="exp-list">
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-company">RMSI</div>
+        <div class="exp-role">Data Engineer</div>
+        <div class="exp-period">Nov 2025 — Present</div>
+        <div class="exp-location">📍 United Kingdom</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Processed <strong>HM Land Registry geospatial databases</strong> with 5M+ spatial records, feeding 3+ enterprise GIS systems.</li>
+        <li>Built automated <strong>spatial ETL workflows using FME</strong> across 10+ formats (shapefiles, GML, GeoJSON), managing 2+ TB of spatial archives.</li>
+        <li>Implemented <strong>ML models for OCR and image inpainting</strong> on 30,000+ scanned geospatial documents to extract and structure map features.</li>
+        <li>Designed scalable <strong>cloud architectures on AWS</strong> (S3, Lambda, Glue, EC2) for multi-TB spatial data ingestion.</li>
+        <li>Configured <strong>AWS Glue transformation pipelines</strong> across 50+ structured and semi-structured geospatial tables with comprehensive QA/QC.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-company">ATDev</div>
+        <div class="exp-role">Data Engineer</div>
+        <div class="exp-period">Aug 2022 — Dec 2023</div>
+        <div class="exp-location">📍 India</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Architected pipelines processing <strong>5+ TB per week</strong> using Apache Airflow, Spark, and Kafka across multiple analytical workloads.</li>
+        <li>Integrated <strong>15+ heterogeneous data sources</strong> into centralized storage for reporting and predictive modeling.</li>
+        <li>Optimised <strong>Amazon Redshift clusters</strong> at terabyte scale via refined distribution/sort keys and query execution plans.</li>
+        <li>Containerised deployment workflows with <strong>Docker and Git</strong>, enabling consistent dev/staging/production environments.</li>
+        <li>Embedded <strong>schema enforcement and data quality checks</strong> across 20+ relational tables within all ETL pipeline stages.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-meta">
+        <div class="exp-company">Trinity Technolabs</div>
+        <div class="exp-role">Data Engineer</div>
+        <div class="exp-period">Jun 2021 — Jul 2022</div>
+        <div class="exp-location">📍 India</div>
+      </div>
+      <ul class="exp-bullets">
+        <li>Designed pipelines handling <strong>3+ TB per week</strong> using Apache Airflow, Spark, and Kafka across enterprise analytics platforms.</li>
+        <li>Implemented <strong>real-time Kafka streaming</strong> workflows with producers/consumers for event-driven data exchange.</li>
+        <li>Configured <strong>AWS S3, Redshift, and CloudWatch</strong> infrastructure supporting terabyte-scale production workloads.</li>
+        <li>Optimised <strong>Spark transformation jobs</strong> with partitioning, memory tuning, and efficient joins for high-volume batch processing.</li>
+        <li>Collaborated within <strong>agile sprint cycles</strong> translating data requirements into scalable technical implementations.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">PROJECTS</h2>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-meta">
+        <div class="project-num">// 001 · MSc Dissertation</div>
+        <div class="project-title">Football Analysis System via Computer Vision & ML</div>
+        <div class="project-context">London — Published at MathSport International Conference 2025</div>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">YOLOv11</span>
+          <span class="project-tag">ByteTrack</span>
+          <span class="project-tag">OpenCV</span>
+          <span class="project-tag">Optical Flow</span>
+          <span class="project-tag">KMeans</span>
+        </div>
+        <div class="project-links">
+          <a href="https://math.uni.lu/midas/events/mathsports2025/files/Booklet.pdf" target="_blank" class="project-link">Conference Paper ↗</a>
+        </div>
+      </div>
+      <div class="project-body">
+        <ul class="project-bullets">
+          <li>Built a system to analyse football videos using <strong>Python, YOLOv11, ByteTrack, KMeans, Optical Flow, and OpenCV</strong> — measuring player speed, distance, and possession from single-camera feeds.</li>
+          <li>Applied data analytics and ML techniques to derive actionable insights; work was <strong>accepted and published</strong> at MathSport International 2025 (Page 106).</li>
+          <li>Techniques directly applicable to energy sector use cases like <strong>predictive maintenance and resource optimisation</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-meta">
+        <div class="project-num">// 002 · AI / LLM Engineering</div>
+        <div class="project-title">Financial Regulation RAG Agent with Tool Calling</div>
+        <div class="project-context">End-to-end production-ready RAG system</div>
+        <div class="project-tags">
+          <span class="project-tag">LangChain</span>
+          <span class="project-tag">Chroma</span>
+          <span class="project-tag">AWS Bedrock</span>
+          <span class="project-tag">RAG</span>
+          <span class="project-tag">Tool Calling</span>
+          <span class="project-tag">Claude 3</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/nikhilmuneshwar0/finance-rag-agent" target="_blank" class="project-link">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="project-body">
+        <ul class="project-bullets">
+          <li>Designed an end-to-end <strong>RAG system over FCA/PRA regulatory PDFs</strong> using LangChain and Chroma vector store.</li>
+          <li>Integrated <strong>AWS Bedrock Claude 3 Sonnet</strong> with streaming responses and real-time tool calling for live stock lookups and calculations.</li>
+          <li>Deployed as a <strong>production-ready web application</strong> with a clean user interface and robust error handling.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-meta">
+        <div class="project-num">// 003 · AWS Data Engineering</div>
+        <div class="project-title">Real-Time Retail Sales Data Pipeline on AWS</div>
+        <div class="project-context">End-to-end streaming ETL for retail analytics</div>
+        <div class="project-tags">
+          <span class="project-tag">AWS Kinesis</span>
+          <span class="project-tag">AWS Glue</span>
+          <span class="project-tag">Redshift</span>
+          <span class="project-tag">PySpark</span>
+          <span class="project-tag">Lambda</span>
+          <span class="project-tag">QuickSight</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <ul class="project-bullets">
+          <li>Designed and implemented a <strong>real-time ETL pipeline using AWS Kinesis, Glue, and Redshift</strong>, processing 2M+ sales records daily from transactional data streams.</li>
+          <li>Developed data transformation logic with <strong>PySpark and AWS Lambda</strong>, enabling near real-time analytics for inventory tracking and pricing optimisation.</li>
+          <li>Automated data validation and reporting via <strong>Amazon QuickSight dashboards</strong>, reducing manual reconciliation time by 6 hours per batch cycle.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-meta">
+        <div class="project-num">// 004 · Azure & Snowflake</div>
+        <div class="project-title">Healthcare Data Lakehouse — Azure Databricks & Snowflake</div>
+        <div class="project-context">Unified analytics across 5+ disparate healthcare datasets</div>
+        <div class="project-tags">
+          <span class="project-tag">Azure Data Factory</span>
+          <span class="project-tag">Databricks</span>
+          <span class="project-tag">Snowflake</span>
+          <span class="project-tag">Delta Lake</span>
+          <span class="project-tag">Apache Airflow</span>
+        </div>
+      </div>
+      <div class="project-body">
+        <ul class="project-bullets">
+          <li>Built an end-to-end <strong>data lakehouse architecture using Azure Data Factory, Databricks, and Snowflake</strong>, integrating 5+ disparate healthcare datasets for unified analytics.</li>
+          <li>Implemented <strong>Delta Lake for incremental data loading and ACID compliance</strong>, improving refresh efficiency and ensuring reliability across analytical workloads.</li>
+          <li>Orchestrated ETL workflows with <strong>Apache Airflow</strong>, enabling automated scheduling, monitoring, and pipeline alerting with 99.9% execution reliability.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">SKILLS</h2>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Programming</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Bash</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Data Engineering</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Apache Spark</span>
+        <span class="skill-tag">Apache Kafka</span>
+        <span class="skill-tag">Apache Airflow</span>
+        <span class="skill-tag">ETL Pipelines</span>
+        <span class="skill-tag">dbt</span>
+        <span class="skill-tag">Databricks</span>
+        <span class="skill-tag">Data Modelling</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Cloud & Databases</div>
+      <div class="skill-tags">
+        <span class="skill-tag">AWS S3</span>
+        <span class="skill-tag">AWS Glue</span>
+        <span class="skill-tag">Lambda</span>
+        <span class="skill-tag">Redshift</span>
+        <span class="skill-tag">Bedrock</span>
+        <span class="skill-tag">Azure</span>
+        <span class="skill-tag">BigQuery</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">MongoDB</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-label">ML & AI</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Scikit-learn</span>
+        <span class="skill-tag">PyTorch</span>
+        <span class="skill-tag">Hugging Face</span>
+        <span class="skill-tag">RAG</span>
+        <span class="skill-tag">LangChain</span>
+        <span class="skill-tag">Computer Vision</span>
+        <span class="skill-tag">OCR</span>
+        <span class="skill-tag">YOLOv11</span>
+        <span class="skill-tag">LLM Integration</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Geospatial</div>
+      <div class="skill-tags">
+        <span class="skill-tag">FME</span>
+        <span class="skill-tag">Spatial ETL</span>
+        <span class="skill-tag">GIS Processing</span>
+        <span class="skill-tag">Schema Mapping</span>
+        <span class="skill-tag">GeoJSON</span>
+        <span class="skill-tag">GML</span>
+        <span class="skill-tag">Shapefiles</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-label">Dev & Analysis</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">REST APIs</span>
+        <span class="skill-tag">CI/CD</span>
+        <span class="skill-tag">Tableau</span>
+        <span class="skill-tag">Power BI</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Flutter</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">EDUCATION</h2>
+  </div>
+
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <div class="edu-degree">MSc Data Science</div>
+      <div class="edu-school">Kingston University, UK</div>
+      <div class="edu-period">Jan 2024 — Jul 2025</div>
+    </div>
+    <div class="edu-card reveal">
+      <div class="edu-degree">B.Tech Information Technology</div>
+      <div class="edu-school">Vishwakarma Institute of Technology, India</div>
+      <div class="edu-period">Aug 2017 — May 2021</div>
+    </div>
+  </div>
+
+  <div class="cert-list reveal">
+    <div class="cert-card">
+      <div class="cert-icon">◈</div>
+      <div>
+        <div class="cert-name">Data Analytics Job Simulation</div>
+        <div class="cert-org">Deloitte · Forage — August 2025</div>
+        <div style="margin-top:8px; font-size:11px; color: var(--muted);">Analysed data using Excel and Tableau to create dashboards and draw business conclusions in forensic technology scenarios.</div>
+        <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/9PBTqmSxAf6zZTseP/io9DzWKe3PTsiS6GG_9PBTqmSxAf6zZTseP_M3nKsvgEevbMPcHny_1754655857708_completion_certificate.pdf" target="_blank" style="display:inline-block; margin-top:10px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); text-decoration:none; border:1px solid var(--accent2); padding:5px 10px; transition:all 0.2s;">View Certificate ↗</a>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">◈</div>
+      <div>
+        <div class="cert-name">Data Science Job Simulation</div>
+        <div class="cert-org">British Airways · Forage — July 2025</div>
+        <div style="margin-top:8px; font-size:11px; color: var(--muted);">Scraped and analysed customer data to build predictive models influencing buying behaviour.</div>
+        <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/tMjbs76F526fF5v3G/NjynCWzGSaWXQCxSX_tMjbs76F526fF5v3G_M3nKsvgEevbMPcHny_1752060595666_completion_certificate.pdf" target="_blank" style="display:inline-block; margin-top:10px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); text-decoration:none; border:1px solid var(--accent2); padding:5px 10px; transition:all 0.2s;">View Certificate ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="border-top: 1px solid var(--border);">
+  <h2 class="contact-title">LET'S <span>WORK</span><br>TOGETHER</h2>
+  <div class="contact-links">
+    <a href="mailto:nikhilmuneshwar05@gmail.com" class="contact-link">
+      ✉ nikhilmuneshwar05@gmail.com
+    </a>
+    <a href="tel:+447587789191" class="contact-link">
+      ✆ +44 7587 789 191
+    </a>
+    <a href="https://www.linkedin.com/in/nikhilmuneshwar/" target="_blank" class="contact-link">
+      ↗ LinkedIn
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2025 Nikhil Muneshwar</span>
+  <span class="footer-tag">Data Engineer · Kingston Upon Thames, UK</span>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  reveals.forEach((el) => observer.observe(el));
+</script>
+</body>
+</html>
