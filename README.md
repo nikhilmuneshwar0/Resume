@@ -9,7 +9,7 @@ A sleek, dark-themed personal portfolio and resume website built with vanilla HT
 
 ## 🔗 Live Site
 
-View the portfolio at: [https://nikhilmuneshwar0.github.io/my-resume](https://nikhilmuneshwar0.github.io/my-resume)
+View the portfolio at: [https://nikhilmuneshwar0.github.io/Resume/](https://nikhilmuneshwar0.github.io/Resume/)
 
 ---
 
